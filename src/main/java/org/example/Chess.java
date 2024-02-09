@@ -1,61 +1,96 @@
-package org.example;
+class Piece {
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+    // ...
+
+    /**
+     * This method does not have to check the validity of the position
+     */
+    public void setArbitraryPosition(Position currentPosition) {
+        // ...
+    }
+
+    /**
+     * This method checks if the position is a valid position
+     */
+    public boolean isValidPosition(Position newPosition) {
+        // ...
+    }
+}
+
+class Player{
+
+    public void setColorWhite(boolean b) {
+    }
+}
+class Position{
+    public Position(char letter, int number){
+
+    }
+}
+
+
+// ...
+// write here all missing classes
+// ...
+
+
 public class Chess {
-    private final static int SIZE = 8;
-    private final static String[][] board = new String[SIZE][SIZE];
-
-    public static void startboard(){
-        for(int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                board[i][j] = " ";
-            }
-        }
-        for (int i = 2; i < 7; i++){
-            for (int j = 0; j < SIZE; j++) {
-                board[j][i]  ="* ";
-            }
-        }
-        for(int i = 0; i < SIZE; i++){
-            board[i][1] = "bP";
-            board[i][6] = "wP";
-        }
-        board[0][0] = "bR";
-        board[7][0] = "bR";
-        board[1][0] = "bN";
-        board[6][0] = "bN";
-        board[2][0] = "bB";
-        board[5][0] = "bB";
-        board[3][0] = "bQ";
-        board[4][0] = "bK";
-
-        board[7][7] = "wR";
-        board[0][7] = "wR";
-        board[1][7] = "wN";
-        board[6][7] = "wN";
-        board[2][7] = "wB";
-        board[5][7] = "wB";
-        board[3][7] = "wQ";
-        board[4][7] = "wK";
-
-        print(board);
-    }
-
-    public static void print(String[][] board) {
-        System.out.println();
-        for (int row = 0; row < board.length; row++) {
-            System.out.print(row+1 + "  ");
-            for (int column = 0; column < board.length; column++) {
-                System.out.print(board[column][row] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("   a  b  c  d  e  f  g  h");
-    }
 
     public static void main(String[] args) {
-        Player p = new Player();
-        startboard();
+        Player p1 = new Player("White player");
+        p1.setColorWhite(true);
+        Player p2 = new Player("Black player");
+        p2.setColorWhite(false);
+
+        System.out.println("Testing kings:");
+        Piece whiteKing = new King(p1);
+        whiteKing.setArbitraryPosition(new Position('f', 5));
+        test(whiteKing, 'a', 1, false);
+        test(whiteKing, 'f', 4, true);
+
+        System.out.println("Testing rooks:");
+        Rook blackRook = new Rook(p2);
+        blackRook.setArbitraryPosition('d', 5);
+        test(blackRook, 'h', 5, true);
+        test(blackRook, 'h', 1, false);
+        test(blackRook, 'd', 9, false);
+
+        System.out.println("Testing bishops:");
+        Piece whiteBishop = new Bishop(p1);
+        whiteBishop.setArbitraryPosition(new Position('d', 5));
+        test(whiteBishop, 'b', 2, false);
+        test(whiteBishop, 'a', 8, true);
+
+        System.out.println("Testing knigts:");
+        Knight blackKnight = new Knight(p2);
+        blackKnight.setArbitraryPosition('d', 4);
+        test(blackKnight, 'e', 6, true);
+        test(blackKnight, 'f', 6, false);
+        test(blackKnight, 'c', 2, true);
+        test(blackKnight, 'i', 8, false);
+
+        System.out.println("Testing pawns:");
+        Pawn whitePawn = new Pawn(p1);
+        Pawn blackPawn = new Pawn(p2);
+        blackPawn.setArbitraryPosition('b', 4);
+        test(blackPawn, 'b', 3, true);
+        test(blackPawn, 'b', 5, false);
+        whitePawn.setArbitraryPosition('f', 2);
+        test(whitePawn, 'f', 3, true);
+        test(whitePawn, 'f', 4, true);
+        blackPawn.setArbitraryPosition('g', 5);
+        test(blackPawn, 'g', 4, true);
+        test(blackPawn, 'g', 3, false);
+        whitePawn.setArbitraryPosition('e', 7);
+        test(whitePawn, 'd', 8, false);
+        test(whitePawn, 'f', 8, false);
+    }
+
+    public static void test(Piece p, char x, int y, boolean valid) {
+        if (p.isValidPosition(new Position(x, y)) == valid) {
+            System.out.println("  > Test passed!");
+        } else {
+            System.out.println("  X Test NOT passed!");
+        }
     }
 }
