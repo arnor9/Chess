@@ -1,23 +1,28 @@
-class Piece {
+package org.example;
 
-    // ...
-
+abstract class Piece {
     /**
      * This method does not have to check the validity of the position
      */
     public void setArbitraryPosition(Position currentPosition) {
-        // ...
-    }
 
+    }
+    public void setArbitraryPosition(char x, int y) {
+
+
+    }
     /**
      * This method checks if the position is a valid position
      */
     public boolean isValidPosition(Position newPosition) {
-        // ...
+
     }
 }
 
 class Player{
+    public Player(String string){
+
+    }
 
     public void setColorWhite(boolean b) {
     }
@@ -27,12 +32,30 @@ class Position{
 
     }
 }
+class Rook extends Piece{
+    public Rook(Player player){
+    }
+}
+class Knight extends Piece{
+    public Knight(Player player){
 
+    }
+}
+class Pawn extends Piece{
+    public Pawn(Player player){
 
-// ...
-// write here all missing classes
-// ...
+    }
+}
+class King extends Piece{
+    public King(Player player){
 
+    }
+}
+class Bishop extends Piece{
+    public Bishop(Player player){
+
+    }
+}
 
 public class Chess {
 
