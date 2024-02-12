@@ -1,64 +1,138 @@
 package org.example;
 
 abstract class Piece {
+    private Position currentPosition;
     /**
      * This method does not have to check the validity of the position
      */
     public void setArbitraryPosition(Position currentPosition) {
-
+        this.currentPosition = currentPosition;
     }
     public void setArbitraryPosition(char x, int y) {
-
-
+        this.currentPosition = new Position(x,y);
+    }
+    Position getPosition(){
+        return this.currentPosition;
     }
     /**
      * This method checks if the position is a valid position
      */
-    public boolean isValidPosition(Position newPosition) {
+    public abstract boolean isValidPosition(Position newPosition);
+    /*public boolean isValidPosition(Position newPosition) {
 
-    }
+    }*/
 }
+
+
 
 class Player{
     public Player(String string){
 
     }
-
     public void setColorWhite(boolean b) {
     }
 }
-class Position{
-    public Position(char letter, int number){
 
+
+
+class Position{
+    private final char x;
+    private final int y;
+    public Position(char x, int y){
+        this.x = x;
+        this.y = y;
+    }
+    public char getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
     }
 }
+
+
+
 class Rook extends Piece{
     public Rook(Player player){
+
+    }
+    @Override
+    public boolean isValidPosition(Position newPosition) {
+        Position currentPosition = this.getPosition();
+
+        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+
+        return (XDiff == 0 && YDiff != 0) || (XDiff != 0 && YDiff == 0);
     }
 }
+
 class Knight extends Piece{
     public Knight(Player player){
 
+    }
+    @Override
+    public boolean isValidPosition(Position newPosition) {
+        Position currentPosition = this.getPosition();
+
+        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+
+        return (XDiff == 2 && YDiff == 1) || (XDiff == 1 && YDiff == 2);
     }
 }
 class Pawn extends Piece{
     public Pawn(Player player){
 
     }
+    boolean moved = false;
+    @Override
+    public boolean isValidPosition(Position newPosition) {
+        Position currentPosition = this.getPosition();
+
+        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+
+        if(!moved) {
+            return (XDiff == 1 && YDiff == 0);
+        }
+        else {
+            return (XDiff == 1 && YDiff == 0) || (XDiff == 2 && YDiff == 0);
+        }
+    }
 }
 class King extends Piece{
     public King(Player player){
 
     }
+    @Override
+    public boolean isValidPosition(Position newPosition) {
+        Position currentPosition = getPosition();
+
+        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+
+        return (XDiff <= 1 && YDiff <= 1) && (XDiff + YDiff != 0);
+    }
 }
+
+
 class Bishop extends Piece{
     public Bishop(Player player){
 
     }
+    @Override
+    public boolean isValidPosition(Position newPosition) {
+        Position currentPosition = getPosition();
+
+        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+
+        return (XDiff - YDiff == 0) && (XDiff + YDiff != 0);
+    }
 }
 
 public class Chess {
-
     public static void main(String[] args) {
         Player p1 = new Player("White player");
         p1.setColorWhite(true);
