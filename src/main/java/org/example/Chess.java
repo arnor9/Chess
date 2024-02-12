@@ -2,6 +2,10 @@ package org.example;
 
 abstract class Piece {
     private Position currentPosition;
+    private final Player player;
+    public Piece(Player player){
+        this.player = player;
+    }
     /**
      * This method does not have to check the validity of the position
      */
@@ -18,18 +22,20 @@ abstract class Piece {
      * This method checks if the position is a valid position
      */
     public abstract boolean isValidPosition(Position newPosition);
-    /*public boolean isValidPosition(Position newPosition) {
-
-    }*/
 }
 
 
 
 class Player{
+    private boolean white;
     public Player(String string){
 
     }
     public void setColorWhite(boolean b) {
+        this.white = b;
+    }
+    public boolean getColor(){
+        return white;
     }
 }
 
@@ -54,6 +60,7 @@ class Position{
 
 class Rook extends Piece{
     public Rook(Player player){
+        super(player);
 
     }
     @Override
@@ -69,7 +76,7 @@ class Rook extends Piece{
 
 class Knight extends Piece{
     public Knight(Player player){
-
+        super(player);
     }
     @Override
     public boolean isValidPosition(Position newPosition) {
@@ -83,7 +90,7 @@ class Knight extends Piece{
 }
 class Pawn extends Piece{
     public Pawn(Player player){
-
+        super(player);
     }
     boolean moved = false;
     @Override
@@ -94,16 +101,15 @@ class Pawn extends Piece{
         int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
 
         if(!moved) {
-            return (XDiff == 1 && YDiff == 0);
-        }
-        else {
-            return (XDiff == 1 && YDiff == 0) || (XDiff == 2 && YDiff == 0);
+            return (XDiff == 0 && YDiff <= 2 && YDiff > 0);
+        } else {
+            return (XDiff == 0 && YDiff == 1);
         }
     }
 }
 class King extends Piece{
     public King(Player player){
-
+        super(player);
     }
     @Override
     public boolean isValidPosition(Position newPosition) {
@@ -119,7 +125,7 @@ class King extends Piece{
 
 class Bishop extends Piece{
     public Bishop(Player player){
-
+        super(player);
     }
     @Override
     public boolean isValidPosition(Position newPosition) {
