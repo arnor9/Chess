@@ -1,11 +1,17 @@
 package org.example;
 
-abstract class Piece {
+class Piece {
     private Position currentPosition;
-    private final Player player;
-    public Piece(Player player){
+    private Player player;
+
+    public Piece(Player player) {
         this.player = player;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     /**
      * This method does not have to check the validity of the position
      */
@@ -21,11 +27,10 @@ abstract class Piece {
     /**
      * This method checks if the position is a valid position
      */
-    public abstract boolean isValidPosition(Position newPosition);
+    public boolean isValidPosition(Position newPosition){
+        return (newPosition.getX() - 97) >= 1 && (newPosition.getX() - 97) <= 8 && newPosition.getY() >= 1 && newPosition.getY() <= 8;
+    }
 }
-
-
-
 class Player{
     private boolean white;
     public Player(String string){
@@ -38,7 +43,6 @@ class Player{
         return white;
     }
 }
-
 
 
 class Position{
@@ -57,21 +61,20 @@ class Position{
 }
 
 
-
 class Rook extends Piece{
     public Rook(Player player){
         super(player);
-
     }
     @Override
     public boolean isValidPosition(Position newPosition) {
-        Position currentPosition = this.getPosition();
-
-        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
-        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
-
-        return (XDiff == 0 && YDiff != 0) || (XDiff != 0 && YDiff == 0);
-    }
+        if (super.isValidPosition(newPosition)){
+            Position currentPosition = this.getPosition();
+            int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+            int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+            return (XDiff == 0 && YDiff != 0) || (XDiff != 0 && YDiff == 0);
+        }
+            return false;
+        }
 }
 
 class Knight extends Piece{
@@ -80,33 +83,45 @@ class Knight extends Piece{
     }
     @Override
     public boolean isValidPosition(Position newPosition) {
-        Position currentPosition = this.getPosition();
+            Position currentPosition = this.getPosition();
 
-        int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
-        int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
-
-        return (XDiff == 2 && YDiff == 1) || (XDiff == 1 && YDiff == 2);
-    }
+            int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
+            int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
+            if(super.isValidPosition(newPosition)) {
+                return (XDiff == 2 && YDiff == 1) || (XDiff == 1 && YDiff == 2);
+            }
+            return false;
+        }
 }
 class Pawn extends Piece{
     public Pawn(Player player){
         super(player);
     }
-    boolean moved = false;
     @Override
-    public boolean isValidPosition(Position newPosition) {
+    public boolean isValidPosition(Position newPosition){
         Position currentPosition = this.getPosition();
+        Player p = this.getPlayer();
 
         int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
         int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
 
-        if(!moved) {
-            return (XDiff == 0 && YDiff <= 2 && YDiff > 0);
-        } else {
-            return (XDiff == 0 && YDiff == 1);
-        }
+        int direction = p.getColor() ? 1 : -1;
+       if(super.isValidPosition(newPosition)) {
+
+           if (XDiff != 0) {
+               return false;
+           }
+           if (YDiff == 2 * direction && currentPosition.getY() == (p.getColor() ? 2 : 7)){
+               return true;
+           }
+           if (YDiff == direction) {
+               return true;
+           }
+       }
+        return false;
     }
 }
+
 class King extends Piece{
     public King(Player player){
         super(player);
@@ -117,8 +132,10 @@ class King extends Piece{
 
         int XDiff = Math.abs(newPosition.getX() - currentPosition.getX());
         int YDiff = Math.abs(newPosition.getY() - currentPosition.getY());
-
-        return (XDiff <= 1 && YDiff <= 1) && (XDiff + YDiff != 0);
+        if (super.isValidPosition(newPosition)) {
+            return (XDiff <= 1 && YDiff <= 1) && (XDiff + YDiff != 0);
+        }
+        return false;
     }
 }
 
@@ -137,6 +154,7 @@ class Bishop extends Piece{
         return (XDiff - YDiff == 0) && (XDiff + YDiff != 0);
     }
 }
+
 
 public class Chess {
     public static void main(String[] args) {
@@ -197,3 +215,4 @@ public class Chess {
         }
     }
 }
+
